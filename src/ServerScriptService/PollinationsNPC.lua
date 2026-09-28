@@ -20,11 +20,7 @@ local DEFAULTS = {
 }
 
 local function copyDefaults(config)
-    local merged = {}
-
-    for key, value in pairs(DEFAULTS) do
-        merged[key] = value
-    end
+    local merged = table.clone(DEFAULTS)
 
     for key, value in pairs(config or {}) do
         merged[key] = value
@@ -47,11 +43,8 @@ end
 
 local function filterForUser(text, player)
     local ok, filtered = pcall(function()
-        local result = TextService:FilterStringAsync(
-            text,
-            player.UserId,
-            Enum.TextFilterContext.PublicChat
-        )
+        local result =
+            TextService:FilterStringAsync(text, player.UserId, Enum.TextFilterContext.PublicChat)
         return result:GetNonChatStringForUserAsync(player.UserId)
     end)
 
@@ -173,10 +166,7 @@ function PollinationsNPC:Reply(player, rawMessage)
         return self.settings.fallbackReply, limitError
     end
 
-    local filteredInput = filterForUser(
-        clampText(message, self.settings.maxInputChars),
-        player
-    )
+    local filteredInput = filterForUser(clampText(message, self.settings.maxInputChars), player)
     if not filteredInput then
         return self.settings.fallbackReply, "input_filter_failed"
     end
@@ -205,10 +195,7 @@ function PollinationsNPC:Reply(player, rawMessage)
     end)
 
     if not requestOk or not response.Success then
-        warn(
-            "[PollinationsNPC] request failed",
-            requestOk and response.StatusCode or "transport"
-        )
+        warn("[PollinationsNPC] request failed", requestOk and response.StatusCode or "transport")
         return self.settings.fallbackReply, "request_failed"
     end
 
@@ -216,7 +203,8 @@ function PollinationsNPC:Reply(player, rawMessage)
         return HttpService:JSONDecode(response.Body)
     end)
 
-    if not decodeOk
+    if
+        not decodeOk
         or type(decoded) ~= "table"
         or type(decoded.choices) ~= "table"
         or type(decoded.choices[1]) ~= "table"
@@ -226,10 +214,8 @@ function PollinationsNPC:Reply(player, rawMessage)
         return self.settings.fallbackReply, "invalid_response"
     end
 
-    local rawReply = clampText(
-        trim(decoded.choices[1].message.content),
-        self.settings.maxOutputChars
-    )
+    local rawReply =
+        clampText(trim(decoded.choices[1].message.content), self.settings.maxOutputChars)
     local filteredReply = filterForUser(rawReply, player)
 
     if not filteredReply then

@@ -93,12 +93,7 @@ local npc = PollinationsNPC.new({
 })
 
 prompt.Triggered:Connect(function(player)
-    remote:FireClient(
-        player,
-        "hint",
-        npcHead,
-        "Type @grix followed by your message in chat."
-    )
+    remote:FireClient(player, "hint", npcHead, "Type @grix followed by your message in chat.")
 end)
 
 local function connectPlayer(player)
@@ -110,24 +105,14 @@ local function connectPlayer(player)
         end
 
         if not closeEnough(player, npcHead) then
-            remote:FireClient(
-                player,
-                "hint",
-                npcHead,
-                "Move closer to Grix before talking."
-            )
+            remote:FireClient(player, "hint", npcHead, "Move closer to Grix before talking.")
             return
         end
 
         local promptText = string.sub(message, #PREFIX + 1):match("^%s*(.-)%s*$")
 
         if not promptText or promptText == "" then
-            remote:FireClient(
-                player,
-                "hint",
-                npcHead,
-                "Try: @grix can you repair my sword?"
-            )
+            remote:FireClient(player, "hint", npcHead, "Try: @grix can you repair my sword?")
             return
         end
 
