@@ -1,0 +1,36 @@
+name: Roblox CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Roblox toolchain
+        uses: ok-nick/setup-aftman@v0.4.2
+
+      - name: Format check
+        run: stylua --check src
+
+      - name: Luau lint
+        run: selene src
+
+      - name: Build playable place
+        run: |
+          mkdir -p build
+          rojo build default.project.json -o build/pollinations-npc-demo.rbxlx
+
+      - name: Verify no obvious credential material
+        run: |
+          if grep -RniE '(sk_[A-Za-z0-9_-]{12,}|pk_[A-Za-z0-9_-]{12,})' .             --exclude-dir=.git --exclude='README.md'; then
+            echo "Potential credential material found"
+            exit 1
+          fi

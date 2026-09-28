@@ -1,0 +1,7 @@
+build/
+*.rbxl
+*.rbxlx
+*.rbxm
+*.rbxmx
+.env
+.DS_Store
