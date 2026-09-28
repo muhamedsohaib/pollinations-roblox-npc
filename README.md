@@ -28,6 +28,8 @@ rojo build default.project.json -o demo.rbxlx
 
 Open `demo.rbxlx` in Roblox Studio.
 
+A prebuilt, CI-validated Studio place is also available from the [v0.1.0 release](https://github.com/muhamedsohaib/pollinations-roblox-npc/releases/tag/v0.1.0): [`pollinations-npc-demo.rbxlx`](https://github.com/muhamedsohaib/pollinations-roblox-npc/releases/download/v0.1.0/pollinations-npc-demo.rbxlx).
+
 You can also run `rojo serve` and connect the Rojo Studio plugin.
 
 ### 2. Enable HTTP requests
@@ -159,7 +161,9 @@ The repository runs:
 
 ## Live demo
 
-A playable Roblox experience URL will be added here before the quest submission is finalized.
+The source, validated Studio build, and release artifact are complete. The final quest requirement is publishing that place to Roblox as a public playable experience.
+
+See [docs/PUBLISHING.md](docs/PUBLISHING.md) for the short publication checklist. The resulting Roblox experience URL will be placed here before the Pollinations app submission is finalized.
 
 ## License
 
